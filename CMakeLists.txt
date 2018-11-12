@@ -13,6 +13,7 @@ OPTION(MAKE_NOISE "Make Perlin Noise application" ON)
 OPTION(MAKE_GEOMETRIC "Make GeoMetric application" ON)
 OPTION(MAKE_SHADY "Make custom Shader application" ON)
 OPTION(MAKE_WOLFENSTEIN "Make Wolfenstein3D raycasting application" ON)
+OPTION(MAKE_SPRAYRACE "Make sprayrace start application" ON)
 
 OPTION(USE_RS232 "Use RS232 library" OFF)
 OPTION(MAKE_SERIAL "Make serial application" OFF)
@@ -144,22 +145,22 @@ file(
 )
 
 ####################################################################
-# start                                                            #
+# sprayrace							   #
 ####################################################################
-IF(MAKE_START)
-	add_executable(start
+IF(MAKE_SPRAYRACE)
+	add_executable(sprayrace
 		start/main.cpp
 		start/myentity.cpp
 		start/myentity.h
 		start/myscene.cpp
 		start/myscene.h
 	)
-	target_link_libraries(start
+	target_link_libraries(sprayrace
 		${ALL_GRAPHICS_LIBS}
 	)
 	# Copy assets to the build directory
 	file(
-		COPY start/assets
+		COPY sprayrace/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
 ENDIF()
