@@ -14,28 +14,86 @@ MyScene::MyScene() : Scene()
 	// start the timer.
 	t.start();
 
-	// create a single instance of MyEntity in the middle of the screen.
-	// the Sprite is added in Constructor of MyEntity.
-	myentity = new MyEntity();
-	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
 
-	// create the scene 'tree'
-	// add myentity to this Scene as a child.
-	this->addChild(myentity);
+	gridwidth = 24;
+	gridheight = 14;
+	cellwidth = 42;
+	cellheight = 36;
+
+	top_layer = 7; // 8 layers (0-7)
+
+	for (unsigned int i = 0; i <= top_layer; i++) {
+		MyEntity* layer = new MyEntity();
+		layers.push_back(layer);
+		this->addChild(layer);
+	}
+
+	// create grid
+	grid = new MyEntity();
+	background = new MyEntity();
+
+	grid->addGrid("assets/gridBlock.tga", 1, 1, gridwidth, gridheight, cellwidth, cellheight);
+	background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	grid->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+
+	background->addSprite("assets/background1.tga");
+	background->sprite()->color = RED;
+
+
+	layers[1]->addChild(grid);
+	layers[0]->addChild(background);
 }
 
 
 MyScene::~MyScene()
 {
+
+	int ls = layers.size();
+	for (int i=0; i<ls; i++) {
+		this->removeChild(layers[i]);
+		delete layers[i];
+		layers[i] = NULL;
+	}
+
+	layers.clear();
+
 	// deconstruct and delete the Tree
-	this->removeChild(myentity);
+	layers[0]->removeChild(grid);
 
 	// delete myentity from the heap (there was a 'new' in the constructor)
-	delete myentity;
+	delete grid;
 }
 
 void MyScene::update(float deltaTime)
 {
+
+	// ###############################################################
+	// Move Camera (Arrow up, down, left, right)
+	// ###############################################################
+	float speed = 600.0f; // 600 units / second
+
+	// Right and Down vector
+	Point2 right = Point2(1, 0);
+	Point2 up = Point2(0, 1);
+	// Direction
+	Vector2 direction = Vector2(0,0);
+
+	if (input()->getKey(KeyCode::Up)) {
+		direction -= up;
+	}
+	if (input()->getKey(KeyCode::Down)) {
+		direction += up;
+	}
+	if (input()->getKey(KeyCode::Right)) {
+		direction += right;
+	}
+	if (input()->getKey(KeyCode::Left)) {
+		direction -= right;
+	}
+	direction.normalize();
+	direction *= deltaTime * speed;
+	camera()->position += direction;
+
 	// ###############################################################
 	// Escape key stops the Scene
 	// ###############################################################
@@ -44,21 +102,12 @@ void MyScene::update(float deltaTime)
 	}
 
 	// ###############################################################
-	// Spacebar scales myentity
-	// ###############################################################
-	if (input()->getKeyDown(KeyCode::Space)) {
-		myentity->scale = Point(0.5f, 0.5f);
-	}
-	if (input()->getKeyUp(KeyCode::Space)) {
-		myentity->scale = Point(1.0f, 1.0f);
-	}
-
-	// ###############################################################
 	// Rotate color
 	// ###############################################################
+
 	if (t.seconds() > 0.0333f) {
-		RGBAColor color = myentity->sprite()->color;
-		myentity->sprite()->color = Color::rotate(color, 0.01f);
+		RGBAColor color = background->sprite()->color;
+		background->sprite()->color = Color::rotate(color, 0.01f);
 		t.start();
 	}
 }

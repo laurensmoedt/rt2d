@@ -9,8 +9,9 @@
 #ifndef MYSCENE_H
 #define MYSCENE_H
 
-#include <rt2d/scene.h>
 
+#include <vector>
+#include <rt2d/scene.h>
 #include "myentity.h"
 
 /// @brief The MyScene class is the Scene implementation.
@@ -29,9 +30,19 @@ public:
 
 private:
 	/// @brief the rotating square in the middle of the screen
-	MyEntity* myentity;
+	MyEntity* grid;
+	MyEntity* background;
+
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
+
+	int gridwidth;
+	int gridheight;
+	int cellwidth;
+	int cellheight;
+
+	unsigned int top_layer;
+	std::vector<MyEntity*> layers;
 };
 
 #endif /* SCENE00_H */

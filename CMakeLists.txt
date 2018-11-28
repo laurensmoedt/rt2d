@@ -149,11 +149,11 @@ file(
 ####################################################################
 IF(MAKE_SPRAYRACE)
 	add_executable(sprayrace
-		start/main.cpp
-		start/myentity.cpp
-		start/myentity.h
-		start/myscene.cpp
-		start/myscene.h
+		sprayrace/main.cpp
+		sprayrace/myentity.cpp
+		sprayrace/myentity.h
+		sprayrace/myscene.cpp
+		sprayrace/myscene.h
 	)
 	target_link_libraries(sprayrace
 		${ALL_GRAPHICS_LIBS}
