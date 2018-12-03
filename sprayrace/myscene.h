@@ -13,6 +13,7 @@
 #include <vector>
 #include <rt2d/scene.h>
 #include "myentity.h"
+#include "player.h"
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -29,12 +30,15 @@ public:
 	virtual void update(float deltaTime);
 
 private:
-	/// @brief the rotating square in the middle of the screen
+
 	MyEntity* grid;
 	MyEntity* background;
-
+	Player* player1;
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
+
+	int iRight;
+	int iDown;
 
 	int gridwidth;
 	int gridheight;

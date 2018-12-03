@@ -14,11 +14,13 @@ MyScene::MyScene() : Scene()
 	// start the timer.
 	t.start();
 
+	iRight = 1;
+	iDown = 0;
 
-	gridwidth = 24;
-	gridheight = 14;
-	cellwidth = 42;
-	cellheight = 36;
+	gridwidth = 60;
+	gridheight = 30;
+	cellwidth = 17;
+	cellheight = 17;
 
 	top_layer = 7; // 8 layers (0-7)
 
@@ -30,18 +32,27 @@ MyScene::MyScene() : Scene()
 
 	// create grid
 	grid = new MyEntity();
-	background = new MyEntity();
-
 	grid->addGrid("assets/gridBlock.tga", 1, 1, gridwidth, gridheight, cellwidth, cellheight);
-	background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
-	grid->position = Point2(SWIDTH / 2, SHEIGHT / 2);
-
-	background->addSprite("assets/background1.tga");
-	background->sprite()->color = RED;
-
-
 	layers[1]->addChild(grid);
+
+	// background
+	background = new MyEntity();
+	background->addSprite("assets/background.tga");
+	background->sprite()->color = RED;
 	layers[0]->addChild(background);
+
+	//players
+	player1 = new Player();
+	player1->addSprite("assets/player1.tga");
+	layers[2]->addChild(player1);
+
+
+	// set position
+	background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	grid->position = Point2(SWIDTH / 9.3, SHEIGHT / 6.3);
+	player1->position = Point2(SWIDTH / 9.3, SHEIGHT / 6.3);
+
+
 }
 
 
@@ -58,41 +69,51 @@ MyScene::~MyScene()
 	layers.clear();
 
 	// deconstruct and delete the Tree
-	layers[0]->removeChild(grid);
+	layers[0]->removeChild(background);
+	layers[1]->removeChild(grid);
+	layers[2]->removeChild(player1);
 
 	// delete myentity from the heap (there was a 'new' in the constructor)
 	delete grid;
+	delete background;
+	delete player1;
 }
 
 void MyScene::update(float deltaTime)
 {
 
-	// ###############################################################
-	// Move Camera (Arrow up, down, left, right)
-	// ###############################################################
-	float speed = 600.0f; // 600 units / second
 
-	// Right and Down vector
-	Point2 right = Point2(1, 0);
-	Point2 up = Point2(0, 1);
+	// ###############################################################
+	// Move players (Arrow up, down, left, right)
+	// ###############################################################
+
+	float speed = 100.0f; // 600 units / second
+
+	// Right and down vector
 	// Direction
-	Vector2 direction = Vector2(0,0);
+	Vector2 direction = Vector2(iRight, iDown);
 
-	if (input()->getKey(KeyCode::Up)) {
-		direction -= up;
+	if (input()->getKey(KeyCode::Up) && iDown != 1) {
+		iRight = 0;
+		iDown = -1;
 	}
-	if (input()->getKey(KeyCode::Down)) {
-		direction += up;
+	if (input()->getKey(KeyCode::Down) && iDown != -1) {
+		iRight = 0;
+		iDown = 1;
 	}
-	if (input()->getKey(KeyCode::Right)) {
-		direction += right;
+	if (input()->getKey(KeyCode::Right) && iRight != -1) {
+		iDown = 0;
+		iRight = 1;
 	}
-	if (input()->getKey(KeyCode::Left)) {
-		direction -= right;
+	if (input()->getKey(KeyCode::Left) && iRight != 1) {
+		iDown = 0;
+		iRight = -1;
 	}
+
 	direction.normalize();
 	direction *= deltaTime * speed;
-	camera()->position += direction;
+	player1->position += direction;
+
 
 	// ###############################################################
 	// Escape key stops the Scene
