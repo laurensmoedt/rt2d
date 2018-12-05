@@ -14,6 +14,9 @@
 /// @brief The MyEntity class is the Entity implementation.
 class MyEntity : public Entity
 {
+
+	
+
 public:
 	/// @brief Constructor
 	MyEntity();

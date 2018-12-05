@@ -11,6 +11,7 @@
 
 
 #include <vector>
+#include <rt2d/timer.h>
 #include <rt2d/scene.h>
 #include "myentity.h"
 #include "player.h"
@@ -18,6 +19,7 @@
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
 {
+
 public:
 	/// @brief Constructor
 	MyScene();
@@ -31,14 +33,18 @@ public:
 
 private:
 
-	MyEntity* grid;
 	MyEntity* background;
 	Player* player1;
+	Player* player2;
+	MyEntity* grid;
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 
-	int iRight;
-	int iDown;
+	int iright1;
+	int idown1;
+
+	int iright2;
+	int idown2;
 
 	int gridwidth;
 	int gridheight;
@@ -47,6 +53,8 @@ private:
 
 	unsigned int top_layer;
 	std::vector<MyEntity*> layers;
+
+
 };
 
 #endif /* SCENE00_H */

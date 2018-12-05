@@ -154,6 +154,8 @@ IF(MAKE_SPRAYRACE)
 		sprayrace/myentity.h
 		sprayrace/myscene.cpp
 		sprayrace/myscene.h
+		sprayrace/player.cpp
+		sprayrace/player.h
 	)
 	target_link_libraries(sprayrace
 		${ALL_GRAPHICS_LIBS}
