@@ -1,7 +1,7 @@
 /**
  * This class describes MyScene behavior.
  *
- * Copyright 2015 Your Name <you@yourhost.com>
+ * Copyright 2018 Laurens Moedt <laurensmoedt@gmail.com>
  */
 
 #include <fstream>
@@ -25,6 +25,7 @@ MyScene::MyScene() : Scene()
 	gridheight = 30;
 	cellwidth = 17;
 	cellheight = 17;
+
 
 	top_layer = 7; // 8 layers (0-7)
 
@@ -124,52 +125,52 @@ void MyScene::update(float deltaTime)
 
 
 		// ###############################################################
-		// Move players (Arrow up, down, left, right)
+		// Move players (player1: Arrow up, down, left, right // player2: a, s, w, d)
 		// ###############################################################
 
-		float speed = 200.0f; // 600 units / second
+		float speed = 68.0f;
+
 
 		Vector2 directionp1 = Vector2(iright1, idown1);
 		Vector2 directionp2 = Vector2(iright2, idown2);
 
+
 		//player1
-		if (input()->getKeyDown(KeyCode::Up) && idown1 != 1) {
+		if (input()->getKey(KeyCode::Up) && idown1 != 1 && p1x % cellwidth == 0) {
 			iright1 = 0;
 			idown1 = -1;
 		}
-		else if (input()->getKeyDown(KeyCode::Down) && idown1 != -1) {
+		else if (input()->getKey(KeyCode::Down) && idown1 != -1 && p1x % cellwidth == 0) {
 			iright1 = 0;
 			idown1 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::Right) && iright1 != -1) {
+		else if (input()->getKey(KeyCode::Right) && iright1 != -1 && p1y % cellheight == 0) {
 			idown1 = 0;
 			iright1 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::Left) && iright1 != 1) {
+		else if (input()->getKey(KeyCode::Left) && iright1 != 1 && p1y % cellheight == 0) {
 			idown1 = 0;
 			iright1 = -1;
 		}
 
 		//player2
-		if (input()->getKeyDown(KeyCode::W) && idown2 != 1) {
+		if (input()->getKey(KeyCode::W) && idown2 != 1 && p2x % cellwidth == 0) {
 			iright2 = 0;
 			idown2 = -1;
 		}
-		else if (input()->getKeyDown(KeyCode::S) && idown2 != -1) {
+		else if (input()->getKey(KeyCode::S) && idown2 != -1 && p2x % cellwidth == 0) {
 			iright2 = 0;
 			idown2 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::D) && iright2 != -1) {
+		else if (input()->getKey(KeyCode::D) && iright2 != -1 && p2y % cellheight == 0) {
 			idown2 = 0;
 			iright2 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::A) && iright2 != 1) {
+		else if (input()->getKey(KeyCode::A) && iright2 != 1 && p2y % cellheight == 0) {
 			idown2 = 0;
 			iright2 = -1;
 		}
 
-		directionp1.normalize();
-		directionp2.normalize();
 		directionp1 *= deltaTime * speed;
 		directionp2 *= deltaTime * speed;
 		player1->position += directionp1;
@@ -177,22 +178,22 @@ void MyScene::update(float deltaTime)
 
 
 
-
+		// fill grid when one of the two players moves over them
 		std::vector<Sprite*> spritebatch = grid->spritebatch();
 		int counter = 0;
 		for (int x=0; x<gridwidth; x++) {
 			for (int y=0; y<gridheight ; y++) {
 				Point2 pos = spritebatch[counter]->spriteposition;
 
-				int halfwidth = cellwidth/2;
-				int halfheight = cellheight/2;
-				int left = pos.x - halfwidth;
-				int right = pos.x + halfwidth;
-				int top = pos.y - halfheight;
-				int bottom = pos.y + halfheight;
+				int quadwidth = cellwidth/4;
+				int quadheight = cellheight/4;
+				int left = pos.x - quadwidth;
+				int right = pos.x + quadwidth;
+				int top = pos.y - quadheight;
+				int bottom = pos.y + quadheight;
 
 				if ( p1x > left && p1x < right && p1y > top && p1y < bottom ) {
-					spritebatch[counter]->color = GREEN;
+					spritebatch[counter]->color = BLUE;
 				}
 				if ( p2x > left && p2x < right && p2y > top && p2y < bottom ) {
 					spritebatch[counter]->color = ORANGE;

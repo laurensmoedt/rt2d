@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Your Name <you@yourhost.com>
+ * Copyright 2018 Laurens Moedt <laurensmoedt@gmail.com>
  *
  * @file myscene.h
  *
@@ -37,6 +37,7 @@ private:
 	Player* player1;
 	Player* player2;
 	MyEntity* grid;
+
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 

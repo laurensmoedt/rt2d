@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Your Name <you@yourhost.com>
+ * Copyright 2018 Laurens Moedt <laurensmoedt@gmail.com>
  *
  * @file myentity.h
  *
@@ -15,7 +15,7 @@
 class MyEntity : public Entity
 {
 
-	
+
 
 public:
 	/// @brief Constructor

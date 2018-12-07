@@ -1,7 +1,7 @@
 /**
  * This class describes MyEntity behavior.
  *
- * Copyright 2015 Your Name <you@yourhost.com>
+ * Copyright 2018 Laurens Moedt <laurensmoedt@gmail.com>
  */
 
  #include "player.h"
