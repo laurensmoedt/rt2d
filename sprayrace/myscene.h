@@ -44,6 +44,17 @@ private:
 	int iright1;
 	int idown1;
 
+	bool dir1;
+	bool dir2;
+	bool dir3;
+	bool dir4;
+
+	bool dir1p2;
+	bool dir2p2;
+	bool dir3p2;
+	bool dir4p2;
+
+
 	int iright2;
 	int idown2;
 

@@ -15,16 +15,26 @@ MyScene::MyScene() : Scene()
 {
 	// start the timer.
 	t.start();
+	
+	dir1 = 0;
+	dir2 = 0;
+	dir3 = 0;
+	dir4 = 0;
+
+	dir1p2 = 0;
+	dir2p2 = 0;
+	dir3p2 = 0;
+	dir4p2 = 0;
 
 	iright1 = 1;
 	iright2 = 1;
 	idown1 = 0;
 	idown2 = 0;
 
-	gridwidth = 60;
-	gridheight = 30;
-	cellwidth = 17;
-	cellheight = 17;
+	gridwidth = 64;
+	gridheight = 32;
+	cellwidth = 16;
+	cellheight = 16;
 
 
 	top_layer = 7; // 8 layers (0-7)
@@ -65,9 +75,9 @@ MyScene::MyScene() : Scene()
 
 	// set position
 	background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
-	grid->position = Point2(SWIDTH / 9.3, SHEIGHT / 6.3);
-	player1->position = Point2(SWIDTH / 9.3, SHEIGHT / 6.3);
-	player2->position = Point2(SWIDTH / 9.3, SHEIGHT / 6.3);
+	grid->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
+	player1->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
+	player2->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
 
 
 }
@@ -80,7 +90,7 @@ MyScene::~MyScene()
 	for (int i=0; i<ls; i++) {
 		this->removeChild(layers[i]);
 		delete layers[i];
-		layers[i] = NULL;
+		layers[i] = nullptr;
 	}
 
 	layers.clear();
@@ -100,12 +110,12 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
+	int p1x = player1->position.x - SWIDTH / 9.4;
+	int p1y = player1->position.y - SHEIGHT / 6.4;
 
-	int p1x = player1->position.x - SWIDTH / 9.3;
-	int p1y = player1->position.y - SHEIGHT / 6.3;
+	int p2x = player2->position.x - SWIDTH / 9.4;
+	int p2y = player2->position.y - SHEIGHT / 6.4;
 
-	int p2x = player2->position.x - SWIDTH / 9.3;
-	int p2y = player2->position.y - SHEIGHT / 6.3;
 
 	// ###############################################################
 	// Escape key stops the Scene
@@ -128,47 +138,88 @@ void MyScene::update(float deltaTime)
 		// Move players (player1: Arrow up, down, left, right // player2: a, s, w, d)
 		// ###############################################################
 
-		float speed = 68.0f;
-
+		float speed = 50.0f;
 
 		Vector2 directionp1 = Vector2(iright1, idown1);
 		Vector2 directionp2 = Vector2(iright2, idown2);
 
 
 		//player1
-		if (input()->getKey(KeyCode::Up) && idown1 != 1 && p1x % cellwidth == 0) {
-			iright1 = 0;
+		if (input()->getKey(KeyCode::Up) && idown1 != 1 && idown1 != -1) {
+			dir1 = 1;
+		}
+		else if (input()->getKey(KeyCode::Down) && idown1 != -1 && idown1 != 1) {
+			dir2 = 1;
+		}
+		else if (input()->getKey(KeyCode::Right) && iright1 != -1 && iright1 != 1) {
+			dir3 = 1;
+		}
+		else if (input()->getKey(KeyCode::Left) && iright1 != 1 && iright1 != -1) {
+			dir4 = 1;
+		}
+
+		if (dir1 == 1 && p1x % cellwidth == 0)
+		{
 			idown1 = -1;
-		}
-		else if (input()->getKey(KeyCode::Down) && idown1 != -1 && p1x % cellwidth == 0) {
 			iright1 = 0;
-			idown1 = 1;
+			dir1 = 0;
 		}
-		else if (input()->getKey(KeyCode::Right) && iright1 != -1 && p1y % cellheight == 0) {
+		if (dir2 == 1 && p1x % cellwidth == 0) 
+		{
+			idown1 = 1;
+			iright1 = 0;
+			dir2 = 0;
+		}
+		if (dir3 == 1 && p1y % cellwidth == 0) 
+		{
 			idown1 = 0;
 			iright1 = 1;
+			dir3 = 0;
 		}
-		else if (input()->getKey(KeyCode::Left) && iright1 != 1 && p1y % cellheight == 0) {
+		if (dir4 == 1 && p1y % cellwidth == 0)
+		{
 			idown1 = 0;
 			iright1 = -1;
+			dir4 = 0;
 		}
 
 		//player2
-		if (input()->getKey(KeyCode::W) && idown2 != 1 && p2x % cellwidth == 0) {
-			iright2 = 0;
+		if (input()->getKeyDown(KeyCode::W) && idown2 != 1 && idown2 != -1) {
+			dir1p2 = 1;
+		}
+		else if (input()->getKeyDown(KeyCode::S) && idown2 != -1 && idown2 != 1) {
+			dir2p2 = 1;
+		}
+		else if (input()->getKeyDown(KeyCode::D) && iright2 != -1 && iright2 != 1) {
+			dir3p2 = 1;
+		}
+		else if (input()->getKeyDown(KeyCode::A) && iright2 != 1 && iright2 != -1) {
+			dir4p2 = 1;
+		}
+
+		if (dir1p2 == 1 && p2x % cellwidth == 0)
+		{
 			idown2 = -1;
-		}
-		else if (input()->getKey(KeyCode::S) && idown2 != -1 && p2x % cellwidth == 0) {
 			iright2 = 0;
-			idown2 = 1;
+			dir1p2 = 0;
 		}
-		else if (input()->getKey(KeyCode::D) && iright2 != -1 && p2y % cellheight == 0) {
+		if (dir2p2 == 1 && p2x % cellwidth == 0)
+		{
+			idown2 = 1;
+			iright2 = 0;
+			dir2p2 = 0;
+		}
+		if (dir3p2 == 1 && p2y % cellheight == 0)
+		{
 			idown2 = 0;
 			iright2 = 1;
+			dir3p2 = 0;
 		}
-		else if (input()->getKey(KeyCode::A) && iright2 != 1 && p2y % cellheight == 0) {
+		if (dir4p2 == 1 && p2y % cellheight == 0)
+		{
 			idown2 = 0;
 			iright2 = -1;
+			dir4p2 = 0;
 		}
 
 		directionp1 *= deltaTime * speed;
