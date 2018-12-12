@@ -27,7 +27,7 @@ MyScene::MyScene() : Scene()
 	dir4p2 = 0;
 
 	iright1 = 1;
-	iright2 = 1;
+	iright2 = -1;
 	idown1 = 0;
 	idown2 = 0;
 
@@ -65,19 +65,21 @@ MyScene::MyScene() : Scene()
 
 	//players
 	player1 = new Player();
-	player1->addSprite("assets/player1.tga");
+	player1->addSprite("assets/player.tga");
+	player1->sprite()->color = BLUE;
 	layers[2]->addChild(player1);
 
 	player2 = new Player();
-	player2->addSprite("assets/player2.tga");
+	player2->addSprite("assets/player.tga");
+	player2->sprite()->color = ORANGE;
 	layers[2]->addChild(player2);
 
 
 	// set position
 	background->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 	grid->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
-	player1->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
-	player2->position = Point2(SWIDTH / 9.4, SHEIGHT / 6.4);
+	player1->position = Point2(SWIDTH / 4.2, SHEIGHT / 2.14);
+	player2->position = Point2(SWIDTH / 1.31, SHEIGHT / 2.14);
 
 
 }
@@ -245,6 +247,7 @@ void MyScene::update(float deltaTime)
 
 				if ( p1x > left && p1x < right && p1y > top && p1y < bottom ) {
 					spritebatch[counter]->color = BLUE;
+					
 				}
 				if ( p2x > left && p2x < right && p2y > top && p2y < bottom ) {
 					spritebatch[counter]->color = ORANGE;
