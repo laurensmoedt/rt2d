@@ -41,8 +41,8 @@ private:
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 
-	int iright1;
-	int idown1;
+	int p1xBorder;
+	int p1yBorder;
 
 	bool dir1;
 	bool dir2;
@@ -54,7 +54,8 @@ private:
 	bool dir3p2;
 	bool dir4p2;
 
-
+	int iright1;
+	int idown1;
 	int iright2;
 	int idown2;
 
@@ -62,6 +63,8 @@ private:
 	int gridheight;
 	int cellwidth;
 	int cellheight;
+
+	int p1counter;
 
 	unsigned int top_layer;
 	std::vector<MyEntity*> layers;
