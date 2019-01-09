@@ -1081,7 +1081,7 @@ HTML_EXTRA_STYLESHEET  =
 HTML_EXTRA_FILES       =
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
-# will adjust the colors in the stylesheet and background images according to
+# will adjust the colors in the stylesheet and gridBackground images according to
 # this color. Hue is specified as an angle on a colorwheel, see
 # http://en.wikipedia.org/wiki/Hue for more information. For instance the value
 # 0 represents red, 60 is yellow, 120 is green, 180 is cyan, 240 is blue, 300
@@ -2267,7 +2267,7 @@ DOT_GRAPH_MAX_NODES    = 50
 MAX_DOT_GRAPH_DEPTH    = 0
 
 # Set the DOT_TRANSPARENT tag to YES to generate images with a transparent
-# background. This is disabled by default, because dot on Windows does not seem
+# gridBackground. This is disabled by default, because dot on Windows does not seem
 # to support this out of the box.
 #
 # Warning: Depending on the platform used, enabling this option may lead to

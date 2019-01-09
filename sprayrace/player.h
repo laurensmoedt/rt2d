@@ -3,7 +3,7 @@
  *
  * @file player.h
  *
- * @brief description of MyEntity behavior.
+ * @brief description of BasicEntity behavior.
  */
 
 
@@ -23,7 +23,6 @@ public:
 	virtual void update(float deltaTime);
 
 private:
-	/* add your private declarations */
 
 };
 
