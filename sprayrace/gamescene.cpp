@@ -15,6 +15,8 @@ GameScene::GameScene() : Scene()
 	// start the timer.
 	t.start();
 
+	speed = 150.0f;
+
 	//movements
 	dir1 = 0;
 	dir2 = 0;
@@ -76,6 +78,9 @@ GameScene::GameScene() : Scene()
 	restartButton->position = Point2(SWIDTH / 3, SHEIGHT / 3);
 	restartButton->setButtonRun(std::bind(&GameScene::restart, this));
 
+	blueScore = 0;
+	orangeScore = 0;
+
 	//add to scene
 	layers[0]->addChild(gameBackground);
 	layers[0]->addChild(gridBackground);
@@ -110,6 +115,7 @@ GameScene::~GameScene()
 	delete player1;
 	delete player2;
 	delete endMenu;
+	delete restartButton;
 
 	int ts = text.size();
 	for (int i = 0; i<ts; i++) {
@@ -153,7 +159,7 @@ void GameScene::update(float deltaTime)
 		// 				(player2: a, s, w, d)
 		// ###############################################################
 
-		float speed = 150.0f;
+		
 
 		Vector2 directionp1 = Vector2(iright1, idown1);
 		Vector2 directionp2 = Vector2(iright2, idown2);
@@ -264,10 +270,12 @@ void GameScene::update(float deltaTime)
 					if (p1x > left && p1x < right && p1y > top && p1y < bottom) {
 						if (spritebatch[counter]->color == ORANGE)
 						{
+							orangeScore += 1;
 							endScreen();
 						}
 						else if (spritebatch[counter]->color == BLUE)
 						{
+							orangeScore += 1;
 							endScreen();
 						}
 						else
@@ -281,14 +289,12 @@ void GameScene::update(float deltaTime)
 				if (pos != p2lastSpritePos)
 				{
 					if (p2x > left && p2x < right && p2y > top && p2y < bottom) {
-						if (spritebatch[counter]->color == BLUE)
+						if (spritebatch[counter]->color == BLUE || spritebatch[counter]->color == ORANGE)
 						{
+							blueScore += 1;
 							endScreen();
 						}
-						else if (spritebatch[counter]->color == ORANGE)
-						{
-							endScreen();
-						}
+						
 						else
 						{
 							spritebatch[counter]->color = ORANGE;
@@ -303,50 +309,64 @@ void GameScene::update(float deltaTime)
 		//collision p1
 		if (p1y == p2y && p1x == p2x)
 		{
-			this->stop();
+			endScreen();
 		}
-		else if (p1x < 0)
+		else if (p1x < 0 || p1y < 0)
 		{
-			this->stop();
+			orangeScore += 1;
+			endScreen();
 		}
-		else if (p1y < 0)
+		
+		else if (p1x >= 1024 || p1y >= 512)
 		{
-			this->stop();
-		}
-		else if (p1x >= 1024)
-		{
-			this->stop();
-		}
-		else if (p1y >= 512)
-		{
-			this->stop();
+			orangeScore += 1;
+			endScreen();
 		}
 		//collision p2
-		else if (p2x < 0)
+		else if (p2x < 0 || p2y < 0)
 		{
-			this->stop();
+			blueScore += 1;
+			endScreen();
 		}
-		else if (p2y < 0)
+		else if (p2x >= 1024 || p2y >= 512)
 		{
-			this->stop();
-		}
-		else if (p2x >= 1024)
-		{
-			this->stop();
-		}
-		else if (p2y >= 512)
-		{
-			this->stop();
+			blueScore += 1;
+			endScreen();
 		}
 }
 void GameScene::endScreen() {
-
+	player1->position = Point2(SWIDTH / 5.2, SHEIGHT / 2.14);
+	player2->position = Point2(SWIDTH / 1.2, SHEIGHT / 2.14);
+	std::vector<Sprite*> spritebatch = grid->spritebatch();
+	for (size_t i = 0; i < spritebatch.size(); i++)
+	{
+		spritebatch[i]->color = BLACK;
+	}
+	speed = 0.0f;
 	layers[3]->addChild(endMenu);
-	text[1]->message("blue/orange won");
-	text[1]->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 	layers[3]->addChild(restartButton);
+
+	std::stringstream scoreBlue;
+	scoreBlue << "blue score: " << blueScore;
+	text[1]->message(scoreBlue.str());
+	text[1]->position = Point2(SWIDTH / 2 , SHEIGHT / 2);
+
+	std::stringstream scoreOrange;
+	scoreOrange << "orange score: " << orangeScore;
+	text[2]->message(scoreOrange.str());
+	text[2]->position = Point2(SWIDTH / 2, SHEIGHT / 2 - 50);
+	
 }
 
 void GameScene::restart() {
-
+	
+	layers[3]->removeChild(endMenu);
+	text[1]->clearMessage();
+	text[2]->clearMessage();
+	layers[3]->removeChild(restartButton);
+	speed = 150.0f;
+	iright1 = 1;
+	iright2 = -1;
+	idown1 = 0;
+	idown2 = 0;
 }

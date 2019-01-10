@@ -35,7 +35,7 @@ public:
 	/// @param deltaTime the elapsed time in seconds
 	/// @return void
 	virtual void update(float deltaTime);
-	virtual void endScreen();
+	void endScreen();
 	void restart();
 protected:
 
@@ -53,6 +53,8 @@ private:
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 
+	float speed;
+		
 	bool dir1;
 	bool dir2;
 	bool dir3;
@@ -77,6 +79,9 @@ private:
 	Point2 p2lastSpritePos;
 
 	unsigned int top_layer;
+
+	int blueScore;
+	int orangeScore;
 
 };
 
