@@ -162,6 +162,7 @@ IF(MAKE_SPRAYRACE)
 		sprayrace/endmenu.h
 		sprayrace/button.cpp
 		sprayrace/button.h
+		
 	)
 	target_link_libraries(sprayrace
 		${ALL_GRAPHICS_LIBS}
@@ -171,23 +172,7 @@ IF(MAKE_SPRAYRACE)
 		COPY sprayrace/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
-ENDIF()
-
-####################################################################
-# tron							   #
-####################################################################
-IF(MAKE_TRON)
-	add_executable(sprayrace
-		13 tron/main.cpp
-	)
-	target_link_libraries(sprayrace
-		${ALL_GRAPHICS_LIBS}
-	)
-	# Copy assets to the build directory
-	file(
-		COPY sprayrace/assets
-		DESTINATION ${CMAKE_BINARY_DIR}
-	)
+	
 ENDIF()
 
 ####################################################################

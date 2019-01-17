@@ -33,9 +33,9 @@ GameScene::GameScene() : Scene()
 	idown1 = 0;
 	idown2 = 0;
 
-
 	p1lastSpritePos = Point2(0,0);
 	p2lastSpritePos = Point2(0, 0);
+
 
 	//layers
 	top_layer = 7; // 8 layers (0-7)
@@ -64,22 +64,23 @@ GameScene::GameScene() : Scene()
 	grid = new Grid();
 
 	//players
-	player1 = new Player();
-	player1->sprite()->color = BLUE;
+	player1 = new Player(NEONBLUE);
+	player2 = new Player(NEONORANGE);
 
-	player2 = new Player();
-	player2->sprite()->color = ORANGE;
 
 	//menu's
 	endMenu = new EndMenu();
+	endMenu->sprite()->color = BLACK;
 
 	//buttons
-	restartButton = new Button("Restart", GRAY);
-	restartButton->position = Point2(SWIDTH / 3, SHEIGHT / 3);
+	restartButton = new Button("RESTART", WHITE);
+	restartButton->position = Point2(SWIDTH / 3 - 30, SHEIGHT / 3);
 	restartButton->setButtonRun(std::bind(&GameScene::restart, this));
 
+	//score
 	blueScore = 0;
 	orangeScore = 0;
+
 
 	//add to scene
 	layers[0]->addChild(gameBackground);
@@ -159,23 +160,21 @@ void GameScene::update(float deltaTime)
 		// 				(player2: a, s, w, d)
 		// ###############################################################
 
-		
-
 		Vector2 directionp1 = Vector2(iright1, idown1);
 		Vector2 directionp2 = Vector2(iright2, idown2);
 
 
 		//player1
-		if (input()->getKey(KeyCode::Up) && idown1 != 1 && idown1 != -1) {
+		if (input()->getKey(KeyCode::W) && idown1 != 1 && idown1 != -1) {
 			dir1 = 1;
 		}
-		else if (input()->getKey(KeyCode::Down) && idown1 != -1 && idown1 != 1) {
+		else if (input()->getKey(KeyCode::S) && idown1 != -1 && idown1 != 1) {
 			dir2 = 1;
 		}
-		else if (input()->getKey(KeyCode::Right) && iright1 != -1 && iright1 != 1) {
+		else if (input()->getKey(KeyCode::D) && iright1 != -1 && iright1 != 1) {
 			dir3 = 1;
 		}
-		else if (input()->getKey(KeyCode::Left) && iright1 != 1 && iright1 != -1) {
+		else if (input()->getKey(KeyCode::A) && iright1 != 1 && iright1 != -1) {
 			dir4 = 1;
 		}
 
@@ -205,16 +204,16 @@ void GameScene::update(float deltaTime)
 		}
 
 		//player2
-		if (input()->getKeyDown(KeyCode::W) && idown2 != 1 && idown2 != -1) {
+		if (input()->getKeyDown(KeyCode::Up) && idown2 != 1 && idown2 != -1) {
 			dir1p2 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::S) && idown2 != -1 && idown2 != 1) {
+		else if (input()->getKeyDown(KeyCode::Down) && idown2 != -1 && idown2 != 1) {
 			dir2p2 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::D) && iright2 != -1 && iright2 != 1) {
+		else if (input()->getKeyDown(KeyCode::Right) && iright2 != -1 && iright2 != 1) {
 			dir3p2 = 1;
 		}
-		else if (input()->getKeyDown(KeyCode::A) && iright2 != 1 && iright2 != -1) {
+		else if (input()->getKeyDown(KeyCode::Left) && iright2 != 1 && iright2 != -1) {
 			dir4p2 = 1;
 		}
 
@@ -268,19 +267,19 @@ void GameScene::update(float deltaTime)
 
 				if (pos != p1lastSpritePos) {
 					if (p1x > left && p1x < right && p1y > top && p1y < bottom) {
-						if (spritebatch[counter]->color == ORANGE)
+						if (spritebatch[counter]->color == NEONORANGE)
 						{
 							orangeScore += 1;
 							endScreen();
 						}
-						else if (spritebatch[counter]->color == BLUE)
+						else if (spritebatch[counter]->color == NEONBLUE)
 						{
 							orangeScore += 1;
 							endScreen();
 						}
 						else
 						{
-							spritebatch[counter]->color = BLUE;
+							spritebatch[counter]->color = NEONBLUE;
 							p1lastSpritePos = spritebatch[counter]->spriteposition;
 						}
 					}
@@ -289,15 +288,15 @@ void GameScene::update(float deltaTime)
 				if (pos != p2lastSpritePos)
 				{
 					if (p2x > left && p2x < right && p2y > top && p2y < bottom) {
-						if (spritebatch[counter]->color == BLUE || spritebatch[counter]->color == ORANGE)
+						if (spritebatch[counter]->color == NEONBLUE || spritebatch[counter]->color == NEONORANGE)
 						{
 							blueScore += 1;
 							endScreen();
 						}
-						
+
 						else
 						{
-							spritebatch[counter]->color = ORANGE;
+							spritebatch[counter]->color = NEONORANGE;
 							p2lastSpritePos = spritebatch[counter]->spriteposition;
 						}
 					}
@@ -306,6 +305,7 @@ void GameScene::update(float deltaTime)
 
 			}
 		}
+
 		//collision p1
 		if (p1y == p2y && p1x == p2x)
 		{
@@ -316,7 +316,6 @@ void GameScene::update(float deltaTime)
 			orangeScore += 1;
 			endScreen();
 		}
-		
 		else if (p1x >= 1024 || p1y >= 512)
 		{
 			orangeScore += 1;
@@ -333,7 +332,20 @@ void GameScene::update(float deltaTime)
 			blueScore += 1;
 			endScreen();
 		}
+
+		//displays score of both players
+		std::stringstream scoreBlue;
+		scoreBlue << "POINTS: " << blueScore;
+		text[1]->message(scoreBlue.str(), NEONBLUE);
+		text[1]->position = Point2(128, 30);
+
+		std::stringstream scoreOrange;
+		scoreOrange << "POINTS: " << orangeScore;
+		text[2]->message(scoreOrange.str(), NEONORANGE);
+		text[2]->position = Point2(920, 30);
+
 }
+
 void GameScene::endScreen() {
 	player1->position = Point2(SWIDTH / 5.2, SHEIGHT / 2.14);
 	player2->position = Point2(SWIDTH / 1.2, SHEIGHT / 2.14);
@@ -344,25 +356,25 @@ void GameScene::endScreen() {
 	}
 	speed = 0.0f;
 	layers[3]->addChild(endMenu);
-	layers[3]->addChild(restartButton);
+	text[3]->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	if (blueScore == 5)
+	{
+		text[3]->message("Blue Won!!!", NEONBLUE);
+	}
+	else if (orangeScore == 5)
+	{
+		text[3]->message("Orange Won!!!", NEONORANGE);
+	}
+	else
+	{
+		layers[3]->addChild(restartButton);
+	}
 
-	std::stringstream scoreBlue;
-	scoreBlue << "blue score: " << blueScore;
-	text[1]->message(scoreBlue.str());
-	text[1]->position = Point2(SWIDTH / 2 , SHEIGHT / 2);
-
-	std::stringstream scoreOrange;
-	scoreOrange << "orange score: " << orangeScore;
-	text[2]->message(scoreOrange.str());
-	text[2]->position = Point2(SWIDTH / 2, SHEIGHT / 2 - 50);
-	
 }
 
 void GameScene::restart() {
-	
+
 	layers[3]->removeChild(endMenu);
-	text[1]->clearMessage();
-	text[2]->clearMessage();
 	layers[3]->removeChild(restartButton);
 	speed = 150.0f;
 	iright1 = 1;

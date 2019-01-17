@@ -10,7 +10,6 @@
 #define MYSCENE_H
 
 
-
 #include <vector>
 #include <rt2d/timer.h>
 #include <rt2d/scene.h>
@@ -20,7 +19,6 @@
 #include "grid.h"
 #include "endmenu.h"
 #include "button.h"
-
 /// @brief The GameScene class is the Scene implementation.
 class GameScene : public Scene
 {
@@ -35,6 +33,7 @@ public:
 	/// @param deltaTime the elapsed time in seconds
 	/// @return void
 	virtual void update(float deltaTime);
+
 	void endScreen();
 	void restart();
 protected:
@@ -48,13 +47,16 @@ private:
 	Grid* grid;
 	BasicEntity* gridBackground;
 	BasicEntity* gameBackground;
+	BasicEntity* player1score;
+	BasicEntity* playerbloom;
 	EndMenu* endMenu;
 	Button* restartButton;
+	
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 
 	float speed;
-		
+
 	bool dir1;
 	bool dir2;
 	bool dir3;
@@ -79,10 +81,13 @@ private:
 	Point2 p2lastSpritePos;
 
 	unsigned int top_layer;
-
 	int blueScore;
 	int orangeScore;
 
+
 };
+
+#define NEONBLUE   RGBAColor(77, 55, 255, 255) ///< @brief color NEON BLUE
+#define NEONORANGE   RGBAColor(255, 95, 0, 255) ///< @brief color NEON ORANGE
 
 #endif /* SCENE00_H */

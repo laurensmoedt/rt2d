@@ -27,7 +27,7 @@ public:
 	/// @param deltaTime the elapsed time in seconds
 	/// @return void
 	virtual void update(float deltaTime);
-
+	
 private:
 	/* add your private declarations */
 };

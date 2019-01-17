@@ -16,13 +16,15 @@ class Player : public Entity
 {
 public:
 
-	Player();
+	Player(RGBAColor c);
 
 	virtual ~Player();
 
 	virtual void update(float deltaTime);
 
+	
 private:
+
 
 };
 

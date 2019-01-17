@@ -9,7 +9,7 @@ Button::Button(std::string name, RGBAColor c)
 	display = new Text();
 	display->message(name, c);
 	setTextScale(0.5);
-	setTextOffset(-24);
+	setTextOffset(-48);
 	this->addChild(display);
 }
 
@@ -38,7 +38,7 @@ void Button::checkClick() {
 }
 
 void Button::setTextScale(float scale) {
-	if (scale <= 1.2f) {
+	if (scale <= 1.0f) {
 		display->scale = Point2(scale, scale);
 	}
 }

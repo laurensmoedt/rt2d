@@ -10,7 +10,6 @@ EndMenu::EndMenu() : Entity()
 {
 	this->addSprite("assets/endMenu.tga");
 
-
 }
 
 EndMenu::~EndMenu()

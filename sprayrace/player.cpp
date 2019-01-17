@@ -6,10 +6,14 @@
 
  #include "player.h"
 
-Player::Player()
+Player::Player(RGBAColor c)
 {
+
 	this->addSprite("assets/player.tga");
-}
+	this->sprite()->color = c;
+
+	
+};
 
 Player::~Player()
 {
@@ -19,7 +23,5 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
-
-
-
+	
 }

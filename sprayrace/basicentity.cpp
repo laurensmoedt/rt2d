@@ -18,5 +18,5 @@ BasicEntity::~BasicEntity()
 
 void BasicEntity::update(float deltaTime)
 {
-
+	
 }
