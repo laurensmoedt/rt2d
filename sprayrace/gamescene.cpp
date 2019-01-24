@@ -38,16 +38,25 @@ GameScene::GameScene() : Scene()
 
 
 	//layers
+	// layer 0 is for game background and grid background
+	// layer 1 is for the grid
+	// layer 2 is for both players
+	// layer 3 is for the end menu and restart button
 	top_layer = 7; // 8 layers (0-7)
 	for (unsigned int i = 0; i <= top_layer; i++) {
 		BasicEntity* layer = new BasicEntity();
 		layers.push_back(layer);
 		this->addChild(layer);
 	}
+
+	//text layers
+	// layer 1 is for the score of player 1
+	// layer 2 is for the score of player 2
+	// layer 3 is for the message when one player gets 5 points and wins
 	for (unsigned int i = 0; i < 16; i++) {
 		Text* line = new Text();
 		line->scale = Point2(0.5f, 0.5f);
-
+		
 		text.push_back(line);
 		layers[top_layer]->addChild(line);
 	}
@@ -59,6 +68,7 @@ GameScene::GameScene() : Scene()
 
 	gameBackground = new BasicEntity();
 	gameBackground->addSprite("assets/gameBackground.tga");
+	gameBackground->sprite()->color = RED;
 
 	//grid
 	grid = new Grid();
@@ -67,16 +77,18 @@ GameScene::GameScene() : Scene()
 	player1 = new Player(NEONBLUE);
 	player2 = new Player(NEONORANGE);
 
-
 	//menu's
 	endMenu = new EndMenu();
-	endMenu->sprite()->color = BLACK;
 
 	//buttons
 	restartButton = new Button("RESTART", WHITE);
-	restartButton->position = Point2(SWIDTH / 3 - 30, SHEIGHT / 3);
+	restartButton->position = Point2(SWIDTH / 3 - 80, SHEIGHT / 3);
 	restartButton->setButtonRun(std::bind(&GameScene::restart, this));
 
+	stopButton = new Button("QUIT", WHITE);
+	stopButton->position = Point2(SWIDTH / 2, SHEIGHT / 3);
+	stopButton->setButtonRun(std::bind(&GameScene::stopgame, this));
+	stopButton->setTextOffset(-28);
 	//score
 	blueScore = 0;
 	orangeScore = 0;
@@ -94,7 +106,6 @@ GameScene::GameScene() : Scene()
 	gridBackground->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 	player1->position = Point2(SWIDTH / 5.2, SHEIGHT / 2.14);
 	player2->position = Point2(SWIDTH / 1.2, SHEIGHT / 2.14);
-	endMenu->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 }
 
 
@@ -117,6 +128,7 @@ GameScene::~GameScene()
 	delete player2;
 	delete endMenu;
 	delete restartButton;
+	delete stopButton;
 
 	int ts = text.size();
 	for (int i = 0; i<ts; i++) {
@@ -145,10 +157,11 @@ void GameScene::update(float deltaTime)
 		this->stop();
 	}
 	// ###############################################################
-	// Rotate gridBackground color
+	// Rotate Backgrounds color
 	// ###############################################################
-	if (t.seconds() > 0.0333f) {
-		RGBAColor color = gridBackground->sprite()->color;
+	if (t.seconds() > 0.03f) {
+		RGBAColor color = gameBackground->sprite()->color;
+		gameBackground->sprite()->color = Color::rotate(color, 0.01f);
 		gridBackground->sprite()->color = Color::rotate(color, 0.01f);
 		t.start();
 	}
@@ -334,16 +347,21 @@ void GameScene::update(float deltaTime)
 		}
 
 		//displays score of both players
+		text[4]->message("PLAYER 1", NEONBLUE);
+		text[4]->scale = Point2(1.0f, 1.0f);
+		text[4]->position = Point2(150, 30);
 		std::stringstream scoreBlue;
 		scoreBlue << "POINTS: " << blueScore;
-		text[1]->message(scoreBlue.str(), NEONBLUE);
-		text[1]->position = Point2(128, 30);
+		text[1]->message(scoreBlue.str(), BLUE);
+		text[1]->position = Point2(200, 70);
 
+		text[5]->message("PLAYER 2", NEONORANGE);
+		text[5]->scale = Point2(1.0f, 1.0f);
+		text[5]->position = Point2(900, 30);
 		std::stringstream scoreOrange;
 		scoreOrange << "POINTS: " << orangeScore;
-		text[2]->message(scoreOrange.str(), NEONORANGE);
-		text[2]->position = Point2(920, 30);
-
+		text[2]->message(scoreOrange.str(), ORANGE);
+		text[2]->position = Point2(950, 70);
 }
 
 void GameScene::endScreen() {
@@ -356,18 +374,22 @@ void GameScene::endScreen() {
 	}
 	speed = 0.0f;
 	layers[3]->addChild(endMenu);
-	text[3]->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	text[3]->position = Point2(200, 400);
+	text[3]->scale = Point2(1.0f, 1.0f);
 	if (blueScore == 5)
 	{
-		text[3]->message("Blue Won!!!", NEONBLUE);
+		text[3]->message("BLUE HAS WON THE MATCH!!!", NEONBLUE);
+		layers[3]->addChild(stopButton);
 	}
 	else if (orangeScore == 5)
 	{
-		text[3]->message("Orange Won!!!", NEONORANGE);
+		text[3]->message("ORANGE HAS WON THE MATCH!!!", NEONORANGE);
+		layers[3]->addChild(stopButton);
 	}
 	else
 	{
 		layers[3]->addChild(restartButton);
+		layers[3]->addChild(stopButton);
 	}
 
 }
@@ -376,9 +398,14 @@ void GameScene::restart() {
 
 	layers[3]->removeChild(endMenu);
 	layers[3]->removeChild(restartButton);
+	layers[3]->removeChild(stopButton);
 	speed = 150.0f;
 	iright1 = 1;
 	iright2 = -1;
 	idown1 = 0;
 	idown2 = 0;
+}
+
+void GameScene::stopgame() {
+	this->stop();
 }

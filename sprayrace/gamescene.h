@@ -36,6 +36,7 @@ public:
 
 	void endScreen();
 	void restart();
+	void stopgame();
 protected:
 
 	std::vector<Text*> text;
@@ -51,6 +52,7 @@ private:
 	BasicEntity* playerbloom;
 	EndMenu* endMenu;
 	Button* restartButton;
+	Button* stopButton;
 	
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;

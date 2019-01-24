@@ -9,7 +9,8 @@
 EndMenu::EndMenu() : Entity()
 {
 	this->addSprite("assets/endMenu.tga");
-
+	this->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	
 }
 
 EndMenu::~EndMenu()
