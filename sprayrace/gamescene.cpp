@@ -76,6 +76,8 @@ GameScene::GameScene() : Scene()
 	//players
 	player1 = new Player(NEONBLUE);
 	player2 = new Player(NEONORANGE);
+	player2->addSprite("assets/playerL.tga");
+	player2->sprite()->color = NEONORANGE;
 
 	//menu's
 	endMenu = new EndMenu();
@@ -141,6 +143,8 @@ GameScene::~GameScene()
 
 void GameScene::update(float deltaTime)
 {
+	player2->sprite()->color = NEONORANGE;
+	player1->sprite()->color = NEONBLUE;
 
 	p1x = player1->position.x - SWIDTH / 9.4;
 	p1y = player1->position.y - SHEIGHT / 6.4;
@@ -180,15 +184,23 @@ void GameScene::update(float deltaTime)
 		//player1
 		if (input()->getKey(KeyCode::W) && idown1 != 1 && idown1 != -1) {
 			dir1 = 1;
+			player1->addSprite("assets/playerU.tga");
+			player1->sprite()->color = NEONBLUE;
 		}
 		else if (input()->getKey(KeyCode::S) && idown1 != -1 && idown1 != 1) {
 			dir2 = 1;
+			player1->addSprite("assets/playerD.tga");
+			player1->sprite()->color = NEONBLUE;
 		}
 		else if (input()->getKey(KeyCode::D) && iright1 != -1 && iright1 != 1) {
 			dir3 = 1;
+			player1->addSprite("assets/playerR.tga");
+			player1->sprite()->color = NEONBLUE;
 		}
 		else if (input()->getKey(KeyCode::A) && iright1 != 1 && iright1 != -1) {
 			dir4 = 1;
+			player1->addSprite("assets/playerL.tga");
+			player1->sprite()->color = NEONBLUE;
 		}
 
 		if (dir1 == 1 && p1x % grid->cellwidth == 0)
@@ -219,15 +231,23 @@ void GameScene::update(float deltaTime)
 		//player2
 		if (input()->getKeyDown(KeyCode::Up) && idown2 != 1 && idown2 != -1) {
 			dir1p2 = 1;
+			player2->addSprite("assets/playerU.tga");
+			player2->sprite()->color = NEONORANGE;
 		}
 		else if (input()->getKeyDown(KeyCode::Down) && idown2 != -1 && idown2 != 1) {
 			dir2p2 = 1;
+			player2->addSprite("assets/playerD.tga");
+			player2->sprite()->color = NEONORANGE;
 		}
 		else if (input()->getKeyDown(KeyCode::Right) && iright2 != -1 && iright2 != 1) {
 			dir3p2 = 1;
+			player2->addSprite("assets/playerR.tga");
+			player2->sprite()->color = NEONORANGE;
 		}
 		else if (input()->getKeyDown(KeyCode::Left) && iright2 != 1 && iright2 != -1) {
 			dir4p2 = 1;
+			player2->addSprite("assets/playerL.tga");
+			player2->sprite()->color = NEONORANGE;
 		}
 
 		if (dir1p2 == 1 && p2x % grid->cellwidth == 0)
@@ -271,8 +291,8 @@ void GameScene::update(float deltaTime)
 				Point2 pos = spritebatch[counter]->spriteposition;
 
 
-				int quadwidth = grid->cellwidth/2;
-				int quadheight = grid->cellheight/2;
+				int quadwidth = grid->cellwidth/4;
+				int quadheight = grid->cellheight/4;
 				int left = pos.x - quadwidth;
 				int right = pos.x + quadwidth;
 				int top = pos.y - quadheight;
@@ -404,6 +424,8 @@ void GameScene::restart() {
 	iright2 = -1;
 	idown1 = 0;
 	idown2 = 0;
+	player1->addSprite("assets/playerR.tga");
+	player2->addSprite("assets/playerL.tga");
 }
 
 void GameScene::stopgame() {

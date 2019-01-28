@@ -9,7 +9,8 @@
 Player::Player(RGBAColor c)
 {
 
-	this->addSprite("assets/player.tga");
+	this->addSprite("assets/playerR.tga");
+	this->scale = Point3(1.5f, 1.5f, 1.5f);
 	this->sprite()->color = c;
 
 	
