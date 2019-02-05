@@ -11,11 +11,7 @@
 
 
 GameScene::GameScene() : Scene()
-{
-	// start the timer.
-	t.start();
-
-	speed = 150.0f;
+{	
 
 	//movements
 	dir1 = 0;
@@ -83,6 +79,10 @@ GameScene::GameScene() : Scene()
 	endMenu = new EndMenu();
 
 	//buttons
+	startButton = new Button("START", WHITE);
+	startButton->position = Point2(SWIDTH / 2, SHEIGHT / 3);
+	startButton->setButtonRun(std::bind(&GameScene::startGame, this));
+
 	restartButton = new Button("RESTART", WHITE);
 	restartButton->position = Point2(SWIDTH / 3 - 80, SHEIGHT / 3);
 	restartButton->setButtonRun(std::bind(&GameScene::restart, this));
@@ -102,6 +102,7 @@ GameScene::GameScene() : Scene()
 	layers[1]->addChild(grid);
 	layers[2]->addChild(player1);
 	layers[2]->addChild(player2);
+	layers[3]->addChild(startButton);
 
 	//position
 	gameBackground->position = Point2(SWIDTH / 2, SHEIGHT / 2);
@@ -131,6 +132,7 @@ GameScene::~GameScene()
 	delete endMenu;
 	delete restartButton;
 	delete stopButton;
+	delete startButton;
 
 	int ts = text.size();
 	for (int i = 0; i<ts; i++) {
@@ -143,8 +145,8 @@ GameScene::~GameScene()
 
 void GameScene::update(float deltaTime)
 {
-	player2->sprite()->color = NEONORANGE;
 	player1->sprite()->color = NEONBLUE;
+	player2->sprite()->color = NEONORANGE;
 
 	p1x = player1->position.x - SWIDTH / 9.4;
 	p1y = player1->position.y - SHEIGHT / 6.4;
@@ -372,7 +374,7 @@ void GameScene::update(float deltaTime)
 		text[4]->position = Point2(150, 30);
 		std::stringstream scoreBlue;
 		scoreBlue << "POINTS: " << blueScore;
-		text[1]->message(scoreBlue.str(), BLUE);
+		text[1]->message(scoreBlue.str(), NEONBLUE);
 		text[1]->position = Point2(200, 70);
 
 		text[5]->message("PLAYER 2", NEONORANGE);
@@ -380,7 +382,7 @@ void GameScene::update(float deltaTime)
 		text[5]->position = Point2(900, 30);
 		std::stringstream scoreOrange;
 		scoreOrange << "POINTS: " << orangeScore;
-		text[2]->message(scoreOrange.str(), ORANGE);
+		text[2]->message(scoreOrange.str(), NEONORANGE);
 		text[2]->position = Point2(950, 70);
 }
 
@@ -419,7 +421,7 @@ void GameScene::restart() {
 	layers[3]->removeChild(endMenu);
 	layers[3]->removeChild(restartButton);
 	layers[3]->removeChild(stopButton);
-	speed = 150.0f;
+	speed = 750.0f;
 	iright1 = 1;
 	iright2 = -1;
 	idown1 = 0;
@@ -430,4 +432,10 @@ void GameScene::restart() {
 
 void GameScene::stopgame() {
 	this->stop();
+}
+
+void GameScene::startGame() {
+	speed = 350.0f;
+	t.start();
+	layers[3]->removeChild(startButton);
 }
